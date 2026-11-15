@@ -557,14 +557,15 @@ body.noscroll{overflow:hidden}
 @page{size:letter;margin:0.3in}
 body.printing{background:#fff}
 body.printing .wrap{display:block;padding:0;max-width:none}
-body.printing .no-print,body.printing .left,body.printing .inv-actions,body.printing .sigmodal,body.printing table.lines .x,body.printing table.lines .mini,body.printing table.lines .tx,body.printing .gbar,body.printing .blank{display:none!important}
+body.printing .no-print,body.printing .left,body.printing .inv-actions,body.printing .sigmodal,body.printing table.lines .x,body.printing table.lines .mini,body.printing table.lines .tx,body.printing .gbar,body.printing .additem,body.printing .blank{display:none!important}
 body.printing .panel{border:none;padding:0}
 body.printing .invoice{border:none;padding:0;width:7.9in}
 body.printing input:not([type=checkbox]),body.printing select,body.printing textarea{border:none!important;appearance:none;-webkit-appearance:none;background:transparent}
 body.printing .policy{margin-top:10px}
 @media print{
   body{background:#fff}
-  .no-print,.left,.inv-actions,.sigmodal,.gbar,table.lines .x,table.lines .mini,table.lines .tx{display:none!important}
+  .no-print,.left,.inv-actions,.sigmodal,.gbar,.additem,table.lines .x,table.lines .mini,table.lines .tx{display:none!important}
+  ::placeholder{color:transparent!important}
   .invoice{zoom:var(--pz,1)}
   .wrap,.panel{display:block!important;padding:0!important;border:none!important}
 }
@@ -964,13 +965,7 @@ $('pdfBtn').onclick=async()=>{
   else{doc.save(name);$('status').textContent='Saved: '+name}
 };
 // Print button prints the same one-page PDF; falls back to the browser's print
-$('printBtn').onclick=()=>{
-  if(!window.jspdf){window.print();return}
-  const doc=buildOnePage();doc.autoPrint();const url=doc.output('bloburl');
-  const f=document.createElement('iframe');f.style.cssText='position:fixed;right:0;bottom:0;width:0;height:0;border:0';f.src=url;
-  f.onload=()=>{try{f.contentWindow.focus();f.contentWindow.print()}catch(e){window.open(url,'_blank')}setTimeout(()=>f.remove(),60000)};
-  document.body.appendChild(f);
-};
+$('printBtn').onclick=()=>window.print();
 // Browser print (Ctrl/Cmd+P): hide empty fields and shrink the invoice to fit one page
 window.addEventListener('beforeprint',()=>{
   document.body.classList.add('printing');
